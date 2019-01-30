@@ -1,5 +1,5 @@
 var express = require('express')
-let db = require('./demoFirebaseDB')
+let db = require('./UserService')
 
 var router = express.Router()
 

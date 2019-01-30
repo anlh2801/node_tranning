@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser')
 const express = require("express");
-let err = require('./ErorrClass')
+let err = require('./ErorrUtil')
+let tools = require('./Tools')
 // Set up the express app
 const app = express();
 
@@ -11,9 +12,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use(function (req, res, next) {
-    console.log("Client tocken: " + req.headers.tocken + " ===== " + "Server tocken" + getToken())
+    console.log("Client tocken: " + req.headers.tocken + " ===== " + "Server tocken: " + tools.getToken())
     
-    if (req.headers.tocken == getToken()){
+    if (req.headers.tocken == tools.getToken()){
       console.log("Auth");
       next();
     }
@@ -23,7 +24,7 @@ app.use(function (req, res, next) {
     }
   })
 
-let router = require('./anlhApi')
+let router = require('./UserApi')
 app.use('/router', router)
 
 const PORT = 5000;
@@ -32,6 +33,3 @@ app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`)
 });
 
-function getToken(){
-  return Math.round(new Date().getTime() / (3*60*1000));
-}
