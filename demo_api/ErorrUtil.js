@@ -1,26 +1,27 @@
-class ValidationError extends Error {
+class HttpError extends Error {
     constructor(message) {
       super(message);
     }
   }
 
-// Init Erorr
-let ServerError = new ValidationError("Internal Server Error");
-ServerError.code = 500;
+  class Unauthorized extends HttpError {
+    constructor(message) {
+      super(message);
+      this.code = 401
+    }
+  }
 
-let Unauthorized = new ValidationError("Tocken invalid");
-Unauthorized.code = 401
-
-function sendRes(res, error){
-    res.status(error.code).send({
-        message: error.message,
-      });
-}
+  class InternalServerError extends HttpError {
+    constructor(message) {
+      super(message);
+      this.code = 500
+    }
+  }
 
 module.exports = {
-    sendRes,
-    ServerError : ServerError,
-    Unauthorized : Unauthorized
+  HttpError,
+    Unauthorized,
+    InternalServerError
 };
 
 

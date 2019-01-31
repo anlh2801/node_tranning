@@ -1,26 +1,36 @@
-var express = require('express')
-let db = require('./UserService')
+const express = require('express')
+const service = require('./UserService')
+const err = require('./ErorrUtil')
+const tools = require('./Tools')
 
 var router = express.Router()
 
-
-// get all todos
 router.get('/node/all', async (req, res) => {
-    console.log(req);
-    var data = await db.getAllData('users');
-    console.log(data);
-  res.status(200).send({
-    success: 'true',
-    message: 'Get all DB successfully',
-    todos: data
-  })
+  try{
+    var data = await service.getAllData('users');
+    tools.sendResOK({
+      success: 'true',
+      message: 'Get all DB successfully',
+      users: data
+    })
+  }
+  catch(ex){
+    let error = null
+    const uid = uuid()
+    if(ex instanceof err.HttpError){
+      error = ex
+    }
+    else{
+      error = new err.InternalServerError(`Unexpected Exception, please look at the log id ${uid}`)
+      console.log(`ErrorId: ${uid}, info: ${ex}`)
+    }
+    res.status(error.code).send({message: error.message, stack: error.stack})
+  }
+    
 });
 router.post('/node/add', (req, res) => {
-    let body = req.body;
-    console.log(body);
-    //data.push(body);
-    db.addData('users', body)
-        res.status(200).send({
+  service.addData('users', req.body)
+          tools.sendResOK({
             success: 'true',
             message: 'Add successfully',
           });

@@ -8,7 +8,6 @@ function addData (collectionName, data){
 }
 
 function getAllData (collectionName){
-  console.log(collectionName);
   return firestore.collection(collectionName).get().then((snapshot) => {
     let result = [];
     snapshot.forEach((doc) => {
