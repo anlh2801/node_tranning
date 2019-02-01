@@ -7,7 +7,5 @@ admin.initializeApp({
 });
 
 let firestore = admin.firestore();
-admin.app().delete().then(function() {
-  firebase.initializeApp(newConfig);
-});
-module.exports = {firestore}
+
+module.exports = {firestore : firestore}
